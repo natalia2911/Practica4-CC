@@ -8,16 +8,14 @@ def spark_init():
 
 
 def select_columns(sc):
-    headers = sc.textFile(
-        "/user/datasets/ecbdl14/ECBDL14_IR2.header").collect()
+    headers = sc.textFile("/user/datasets/ecbdl14/ECBDL14_IR2.header").collect()
     headers = list(filter(lambda x: "@inputs" in x, headers))[0]
     headers = headers.replace(",", "").strip().split()
     del headers[0] 
     headers.append("class")
 
     sqlc = SQLContext(sc)
-    df = sqlc.read.csv(
-        '/user/datasets/ecbdl14/ECBDL14_IR2.data', header=False, inferSchema=True)
+    df = sqlc.read.csv('/user/datasets/ecbdl14/ECBDL14_IR2.data', header=False, inferSchema=True)
 
     for i, colname in enumerate(df.columns):
         df = df.withColumnRenamed(colname, headers[i])
